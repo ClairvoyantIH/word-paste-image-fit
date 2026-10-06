@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "language": "zh",
+  "hijack_ctrl_v": false,
+  "smart_paste_hotkey": "ctrl+alt+v",
+  "active_preset": "notes",
+  "presets": [
+    {
+      "id": "notes",
+      "name_zh": "笔记",
+      "name_en": "Notes",
+      "max_width_mode": "percent_of_content",
+      "max_width_value": 92.0,
+      "max_height_mode": "percent_of_page",
+      "max_height_value": 75.0,
+      "allow_upscale": false,
+      "wrap": "inline",
+      "align": "center",
+      "fit_table_cell": true
+    },
+    {
+      "id": "paper",
+      "name_zh": "论文",
+      "name_en": "Paper",
+      "max_width_mode": "percent_of_content",
+      "max_width_value": 100.0,
+      "max_height_mode": "percent_of_page",
+      "max_height_value": 60.0,
+      "allow_upscale": false,
+      "wrap": "inline",
+      "align": "center",
+      "fit_table_cell": true
+    },
+    {
+      "id": "fixed14",
+      "name_zh": "固定14cm",
+      "name_en": "Fixed 14cm",
+      "max_width_mode": "fixed_cm",
+      "max_width_value": 14.0,
+      "max_height_mode": "percent_of_page",
+      "max_height_value": 70.0,
+      "allow_upscale": false,
+      "wrap": "inline",
+      "align": "left",
+      "fit_table_cell": true
+    }
+  ],
+  "page_preview": {
+    "paper": "A4",
+    "margin_cm": {
+      "top": 2.54,
+      "bottom": 2.54,
+      "left": 3.18,
+      "right": 3.18
+    }
+  }
+}

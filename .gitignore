@@ -1,0 +1,14 @@
+.venv/
+.tools/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+dist/
+build/
+*.log
+.DS_Store
+Thumbs.db
+# User runtime config lives in AppData; ignore local copies if created here
+settings.local.json
