@@ -1,10 +1,15 @@
 # Word Paste Image Fit
 
+[![GitHub stars](https://img.shields.io/github/stars/ClairvoyantIH/word-paste-image-fit?style=flat-square)](https://github.com/ClairvoyantIH/word-paste-image-fit/stargazers)
+[![GitHub downloads](https://img.shields.io/github/downloads/ClairvoyantIH/word-paste-image-fit/total?style=flat-square)](https://github.com/ClairvoyantIH/word-paste-image-fit/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](./LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows-0078D6?style=flat-square)](https://github.com/ClairvoyantIH/word-paste-image-fit)
+
 Paste screenshots into Word without endless dragging.
 
 An open-source Windows utility for **desktop Microsoft Word**: smart-fit pasted images to your style rules, with a **live print-layout style preview** so every parameter change shows what the next paste will look like.
 
-[简体中文](./README.md) · [Roadmap](./docs/ROADMAP.md) · [Table-cell fitting](./docs/TABLE_CELL.md)
+[简体中文](./README.md) · [Roadmap](./docs/ROADMAP.md) · [Table-cell fitting](./docs/TABLE_CELL.md) · [Releases](https://github.com/ClairvoyantIH/word-paste-image-fit/releases)
 
 ---
 
@@ -85,6 +90,18 @@ Non-goals for now: macOS Word, Word Online, WPS-first support.
 ## Contributing
 
 Issues and PRs welcome—especially preview UX, paste edge cases, install polish, and a safe image-only Ctrl+V option.
+
+## Star History
+
+The line chart commonly embedded in READMEs is usually **star growth**, not clone count. Release download totals show up in the downloads badge above once assets are published.
+
+<a href="https://www.star-history.com/#ClairvoyantIH/word-paste-image-fit&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ClairvoyantIH/word-paste-image-fit&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ClairvoyantIH/word-paste-image-fit&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ClairvoyantIH/word-paste-image-fit&type=Date" />
+ </picture>
+</a>
 
 ## License
 

@@ -1,10 +1,15 @@
 # Word Paste Image Fit
 
+[![GitHub stars](https://img.shields.io/github/stars/ClairvoyantIH/word-paste-image-fit?style=flat-square)](https://github.com/ClairvoyantIH/word-paste-image-fit/stargazers)
+[![GitHub downloads](https://img.shields.io/github/downloads/ClairvoyantIH/word-paste-image-fit/total?style=flat-square)](https://github.com/ClairvoyantIH/word-paste-image-fit/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](./LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows-0078D6?style=flat-square)](https://github.com/ClairvoyantIH/word-paste-image-fit)
+
 把截图粘进 Word，终于不用再一点点拖。
 
 面向 **Windows 桌面版 Microsoft Word** 的开源小工具：粘贴图片时按你设好的样式自动缩放，并提供类似打印排版的**即时预览**——改参数，立刻看到下一张图会长什么样。
 
-[English](./README.en.md) · [路线图](./docs/ROADMAP.md) · [表格单元格说明](./docs/TABLE_CELL.md)
+[English](./README.en.md) · [路线图](./docs/ROADMAP.md) · [表格单元格说明](./docs/TABLE_CELL.md) · [Releases](https://github.com/ClairvoyantIH/word-paste-image-fit/releases)
 
 ---
 
@@ -93,6 +98,18 @@ tests/        几何/适配单元测试
 - 粘贴边界情况（浮动图、多栏、分节）
 - 安装体验与文档
 - 热键与「仅图片时接管 Ctrl+V」的稳妥实现
+
+## Star History
+
+README 里常见的折线图一般是 **Star 增长曲线**（不是 clone 次数）。真正的「安装包下载次数」看上面的 downloads 徽章，数据来自 [Releases](https://github.com/ClairvoyantIH/word-paste-image-fit/releases)。
+
+<a href="https://www.star-history.com/#ClairvoyantIH/word-paste-image-fit&Date">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=ClairvoyantIH/word-paste-image-fit&type=Date&theme=dark" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=ClairvoyantIH/word-paste-image-fit&type=Date" />
+   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=ClairvoyantIH/word-paste-image-fit&type=Date" />
+ </picture>
+</a>
 
 ## 开源协议
 
