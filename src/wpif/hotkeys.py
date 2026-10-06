@@ -2,36 +2,48 @@ from __future__ import annotations
 
 """Global hotkey helper for smart paste.
 
-- Ctrl+Alt+V: always smart-paste into Word (when this helper is running)
-- Ctrl+V: only while settings.hijack_ctrl_v is on; then only intercepts when
-  Word is focused and the clipboard has an image (otherwise passes through)
+Hotkeys only *request* a paste. The preview UI (or standalone loop) should
+execute Word COM work on a suitable thread.
 
-Run alone:
-    python -m wpif.hotkeys
-
-Or leave the preview window open; it starts this helper in the background.
+- Ctrl+Alt+V: request smart paste
+- Ctrl+V: only while hijack is enabled; Word focused + image clipboard
 """
 
 import threading
 import time
-from typing import Callable
+from collections.abc import Callable
 
 from .config import load_config
 from .word_paste import clipboard_has_image, paste_and_fit, word_is_foreground
+
+RequestHandler = Callable[[str], None]
 
 _passthrough = False
 _started = False
 _ctrl_v_registered = False
 _lock = threading.Lock()
+_handler: RequestHandler | None = None
+_pynput_listener = None
 
 
-def _smart_paste(source: str) -> None:
+def set_request_handler(handler: RequestHandler | None) -> None:
+    """Set callback invoked as handler(source) from the hotkey thread."""
+    global _handler
+    _handler = handler
+
+
+def _emit(source: str) -> None:
+    print(f"[hotkey] fired: {source}")
+    if _handler is not None:
+        _handler(source)
+        return
+    # Standalone fallback: paste here with COM init.
     outcome = paste_and_fit(load_config())
     print(f"[{source}] smart paste:", outcome)
 
 
 def _on_smart_hotkey() -> None:
-    _smart_paste("ctrl+alt+v")
+    _emit("ctrl+alt+v")
 
 
 def _on_ctrl_v() -> None:
@@ -41,7 +53,6 @@ def _on_ctrl_v() -> None:
     if _passthrough:
         return
 
-    # Setting may have been turned off between registration and keypress.
     if not load_config().hijack_ctrl_v:
         _passthrough = True
         try:
@@ -58,7 +69,7 @@ def _on_ctrl_v() -> None:
             _passthrough = False
         return
 
-    _smart_paste("ctrl+v")
+    _emit("ctrl+v")
 
 
 def _sync_ctrl_v_registration() -> None:
@@ -89,10 +100,30 @@ def _watch_settings() -> None:
         time.sleep(0.5)
 
 
-def start_hotkeys(*, blocking: bool = True, on_status: Callable[[str], None] | None = None) -> None:
-    """Register hotkeys. Safe to call once; later calls are no-ops."""
-    global _started
+def _start_pynput_ctrl_alt_v() -> str:
+    """Use pynput for Ctrl+Alt+V — usually works without admin."""
+    global _pynput_listener
+    from pynput import keyboard as pynput_keyboard
+
+    _pynput_listener = pynput_keyboard.GlobalHotKeys({"<ctrl>+<alt>+v": _on_smart_hotkey})
+    _pynput_listener.daemon = True
+    _pynput_listener.start()
+    return "pynput:Ctrl+Alt+V"
+
+
+def _start_keyboard_ctrl_v_watcher() -> str:
+    """keyboard lib is used only when hijack needs suppress."""
     import keyboard  # type: ignore
+
+    # Touch the module so failures surface early.
+    _ = keyboard
+    threading.Thread(target=_watch_settings, name="wpif-hotkey-watch", daemon=True).start()
+    _sync_ctrl_v_registration()
+    return "keyboard:Ctrl+V(optional)"
+
+
+def start_hotkeys(*, blocking: bool = True, on_status: Callable[[str], None] | None = None) -> None:
+    global _started
 
     with _lock:
         if _started:
@@ -101,20 +132,37 @@ def start_hotkeys(*, blocking: bool = True, on_status: Callable[[str], None] | N
             return
         _started = True
 
-    keyboard.add_hotkey("ctrl+alt+v", _on_smart_hotkey, suppress=False)
-    _sync_ctrl_v_registration()
-    threading.Thread(target=_watch_settings, name="wpif-hotkey-watch", daemon=True).start()
+    backends: list[str] = []
+    errors: list[str] = []
 
-    msg = (
-        "Hotkeys ready: Ctrl+Alt+V = smart paste; "
-        "enable 'Hijack Ctrl+V' in the preview window to intercept image pastes in Word."
-    )
+    try:
+        backends.append(_start_pynput_ctrl_alt_v())
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"Ctrl+Alt+V failed: {exc}")
+
+    try:
+        backends.append(_start_keyboard_ctrl_v_watcher())
+    except Exception as exc:  # noqa: BLE001
+        errors.append(f"Ctrl+V helper failed: {exc}")
+
+    if backends:
+        msg = "热键已启动: " + ", ".join(backends)
+    else:
+        msg = "热键启动失败"
+    if errors:
+        msg += " | " + " ; ".join(errors)
+
     print(msg)
     if on_status:
         on_status(msg)
 
     if blocking:
-        keyboard.wait()
+        # Keep process alive for standalone mode.
+        if _pynput_listener is not None:
+            _pynput_listener.join()
+        else:
+            while True:
+                time.sleep(1)
 
 
 def start_hotkeys_background(on_status: Callable[[str], None] | None = None) -> threading.Thread:
@@ -130,7 +178,6 @@ def start_hotkeys_background(on_status: Callable[[str], None] | None = None) -> 
 
 def main() -> None:
     print("Starting Word Paste Image Fit hotkeys. Ctrl+C to exit.")
-    print("Open the preview window and enable 'Hijack Ctrl+V' if you want image-only Ctrl+V.")
     start_hotkeys(blocking=True)
 
 

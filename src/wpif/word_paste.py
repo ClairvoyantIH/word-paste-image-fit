@@ -102,6 +102,10 @@ def paste_and_fit(
     if img is None:
         return PasteOutcome(ok=False, message="no_image")
 
+    # Hotkey callbacks often run off the UI thread; COM needs apartment init.
+    import pythoncom  # type: ignore
+
+    pythoncom.CoInitialize()
     try:
         word = _get_word()
         doc = _ensure_document(word)
@@ -160,6 +164,8 @@ def paste_and_fit(
         )
     except Exception as exc:  # noqa: BLE001
         return PasteOutcome(ok=False, message=str(exc))
+    finally:
+        pythoncom.CoUninitialize()
 
 
 def _set_clipboard_image(img: Image.Image) -> None:

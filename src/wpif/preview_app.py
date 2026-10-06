@@ -14,8 +14,8 @@ from .geometry import (
     pixels_to_points,
 )
 from .i18n import t
-from .word_paste import paste_and_fit
-from .hotkeys import start_hotkeys_background
+from .word_paste import clipboard_has_image, paste_and_fit
+from .hotkeys import set_request_handler, start_hotkeys_background
 
 
 class PreviewApp(tk.Tk):
@@ -40,7 +40,8 @@ class PreviewApp(tk.Tk):
         self._load_style_into_vars(self.cfg.active_style())
         self._refresh_preview()
         self._set_status(t(self.cfg.language, "status_ready"))
-        # Hotkeys run while the preview window is open.
+        # Hotkeys request paste; execute on the Tk main thread for reliable Word COM.
+        set_request_handler(lambda source: self.after(0, lambda s=source: self._handle_hotkey(s)))
         start_hotkeys_background(on_status=lambda msg: self.after(0, lambda: self._set_status(msg)))
 
     def _build_vars(self) -> None:
@@ -401,6 +402,27 @@ class PreviewApp(tk.Tk):
         self._sync_cfg_from_vars()
         path = save_config(self.cfg)
         self._set_status(f"{t(self.cfg.language, 'saved')}: {path}")
+
+    def _handle_hotkey(self, source: str) -> None:
+        lang = self.var_lang.get()
+        self._sync_cfg_from_vars()
+        self._set_status(
+            f"收到快捷键 {source}…" if lang == "zh" else f"Hotkey received: {source}…"
+        )
+        if not clipboard_has_image():
+            self._set_status(
+                f"{source}: 剪贴板没有图片" if lang == "zh" else f"{source}: clipboard has no image"
+            )
+            return
+        outcome = paste_and_fit(self.cfg)
+        if outcome.ok:
+            self._set_status(
+                f"{source} → {t(lang, 'paste_ok')} · "
+                f"{outcome.width_pt / 72 * 2.54:.1f}×{outcome.height_pt / 72 * 2.54:.1f} cm"
+            )
+        else:
+            self._set_status(f"{source} → {t(lang, 'paste_fail')}: {outcome.message}")
+            messagebox.showerror(t(lang, "app_title"), f"{t(lang, 'paste_fail')}\n{outcome.message}")
 
     def _paste_sample_or_clipboard(self) -> None:
         self._sync_cfg_from_vars()
