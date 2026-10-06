@@ -11,8 +11,8 @@
 - [x] Table-cell-aware fitting flag
 - [x] Config persisted under `%AppData%\word-paste-image-fit\`
 - [x] VBA mirror module for later `.dotm` packaging
-- [ ] Optional global hotkey helper polish (`Ctrl+Alt+V`)
-- [ ] Optional Ctrl+V hijack (images only)
+- [x] Optional global hotkey helper polish (`Ctrl+Alt+V`)
+- [x] Optional Ctrl+V hijack (images only; requires preview/hotkey helper running)
 
 ## Phase B — Installer & packaging
 

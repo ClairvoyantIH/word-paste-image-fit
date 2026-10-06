@@ -78,6 +78,10 @@ def _clipboard_image() -> Image.Image | None:
     return None
 
 
+def clipboard_has_image() -> bool:
+    return _clipboard_image() is not None
+
+
 def _apply_paragraph_align(selection, align: str) -> None:
     mapping = {
         "left": WD_ALIGN_PARAGRAPH_LEFT,

@@ -17,7 +17,7 @@ STRINGS = {
         "align_right": "右",
         "wrap_inline": "嵌入型（推荐）",
         "language": "界面语言",
-        "hijack_ctrl_v": "接管 Ctrl+V（仅图片）",
+        "hijack_ctrl_v": "接管 Ctrl+V（仅 Word + 剪贴板是图片；需本窗口保持打开）",
         "save": "保存设置",
         "smart_paste": "智能粘贴到 Word",
         "preview_hint": "下方为即时排版预览（内置示例截图）",
@@ -27,7 +27,7 @@ STRINGS = {
         "paste_ok": "已粘贴并自适应",
         "paste_fail": "粘贴失败：请先打开 Word，并确保剪贴板有图片或使用示例模式",
         "status_ready": "拖动参数即可看到预览变化",
-        "hotkey_hint": "默认快捷键 Ctrl+Alt+V（可在托盘/后续版本配置）",
+        "hotkey_hint": "本窗口打开时：Ctrl+Alt+V 智能粘贴；勾选接管后，Word 里对图片按 Ctrl+V 也会智能缩放",
     },
     "en": {
         "app_title": "Word Paste Image Fit",
@@ -45,7 +45,7 @@ STRINGS = {
         "align_right": "Right",
         "wrap_inline": "In line with text (recommended)",
         "language": "UI language",
-        "hijack_ctrl_v": "Hijack Ctrl+V (images only)",
+        "hijack_ctrl_v": "Hijack Ctrl+V (Word + image clipboard only; keep this window open)",
         "save": "Save settings",
         "smart_paste": "Smart paste into Word",
         "preview_hint": "Live layout preview (built-in sample screenshot)",
@@ -55,10 +55,9 @@ STRINGS = {
         "paste_ok": "Pasted and fitted",
         "paste_fail": "Paste failed: open Word and ensure an image is on the clipboard",
         "status_ready": "Change a parameter to see the preview update",
-        "hotkey_hint": "Default hotkey: Ctrl+Alt+V",
+        "hotkey_hint": "While this window is open: Ctrl+Alt+V smart-pastes; with hijack on, Ctrl+V fits images in Word",
     },
 }
-
 
 def t(lang: str, key: str) -> str:
     table = STRINGS.get(lang) or STRINGS["zh"]

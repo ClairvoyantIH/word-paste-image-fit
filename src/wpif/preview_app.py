@@ -15,6 +15,7 @@ from .geometry import (
 )
 from .i18n import t
 from .word_paste import paste_and_fit
+from .hotkeys import start_hotkeys_background
 
 
 class PreviewApp(tk.Tk):
@@ -39,6 +40,8 @@ class PreviewApp(tk.Tk):
         self._load_style_into_vars(self.cfg.active_style())
         self._refresh_preview()
         self._set_status(t(self.cfg.language, "status_ready"))
+        # Hotkeys run while the preview window is open.
+        start_hotkeys_background(on_status=lambda msg: self.after(0, lambda: self._set_status(msg)))
 
     def _build_vars(self) -> None:
         style = self.cfg.active_style()
@@ -275,6 +278,8 @@ class PreviewApp(tk.Tk):
         if self._building:
             return
         self._sync_cfg_from_vars()
+        # Persist hijack toggle immediately so the hotkey thread picks it up.
+        save_config(self.cfg)
         self._update_value_labels()
         self._refresh_preview()
 
